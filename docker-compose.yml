@@ -56,3 +56,21 @@ services:
       DB_DATABASE: fullstack_db
       DB_USERNAME: admin
       DB_PASSWORD: admin123
+  
+  frontend:
+    build:
+      context: ./frontend
+
+    container_name: react_frontend
+
+    restart: unless-stopped
+
+    ports:
+      - "5173:5173"
+
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+
+    depends_on:
+      - backend

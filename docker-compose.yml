@@ -47,7 +47,7 @@ services:
       - "8000:80"
 
     volumes:
-      - ./backend:/app
+      - ./backend:/var/www/html
 
     depends_on:
       - postgres

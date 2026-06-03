@@ -25,4 +25,17 @@ class ProductoController extends Controller
 
         return response()->json($producto, 201);
     }
+    public function update(Request $request, int $id)
+    {
+        $producto = Producto::findOrFail($id);
+
+        $producto->update([
+            'nombre' => $request->nombre,
+            'descripcion' => $request->descripcion,
+            'precio' => $request->precio,
+            'stock' => $request->stock,
+        ]);
+
+        return response()->json($producto);
+    }
 }

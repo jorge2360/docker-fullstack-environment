@@ -5,6 +5,7 @@ use App\Http\Controllers\ProductoController;
 
 Route::get('/productos', [ProductoController::class, 'index']);
 Route::post('/productos', [ProductoController::class, 'store']);
+Route::put('/productos/{id}', [ProductoController::class, 'update']);
 
 Route::get('/', function () {
 

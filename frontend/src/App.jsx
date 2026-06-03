@@ -43,79 +43,163 @@ function App() {
   }
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h1>Inventario de Productos</h1>
+  <div className="min-h-screen bg-slate-100 p-8">
+    <div className="mx-auto max-w-6xl">
 
-      <form onSubmit={crearProducto}>
-        <h2>Nuevo producto</h2>
+      <div className="mb-8">
+        <h1 className="text-4xl font-bold text-slate-800">
+          Sistema de Inventario
+        </h1>
 
-        <input
-          type="text"
-          placeholder="Nombre"
-          value={nombre}
-          onChange={(e) => setNombre(e.target.value)}
-        />
+        <p className="mt-2 text-slate-600">
+          Gestión de productos utilizando React, Laravel y PostgreSQL
+        </p>
+      </div>
 
-        <br /><br />
+      <div className="mb-8 grid gap-4 md:grid-cols-3">
 
-        <input
-          type="text"
-          placeholder="Descripción"
-          value={descripcion}
-          onChange={(e) => setDescripcion(e.target.value)}
-        />
+        <div className="rounded-xl bg-white p-6 shadow">
+          <h3 className="text-sm font-medium text-slate-500">
+            Total Productos
+          </h3>
 
-        <br /><br />
+          <p className="mt-2 text-3xl font-bold text-blue-600">
+            {productos.length}
+          </p>
+        </div>
 
-        <input
-          type="number"
-          placeholder="Precio"
-          value={precio}
-          onChange={(e) => setPrecio(e.target.value)}
-        />
+        <div className="rounded-xl bg-white p-6 shadow">
+          <h3 className="text-sm font-medium text-slate-500">
+            Stock Total
+          </h3>
 
-        <br /><br />
+          <p className="mt-2 text-3xl font-bold text-green-600">
+            {productos.reduce(
+              (total, p) => total + Number(p.stock || 0),
+              0
+            )}
+          </p>
+        </div>
 
-        <input
-          type="number"
-          placeholder="Stock"
-          value={stock}
-          onChange={(e) => setStock(e.target.value)}
-        />
+        <div className="rounded-xl bg-white p-6 shadow">
+          <h3 className="text-sm font-medium text-slate-500">
+            Valor Inventario
+          </h3>
 
-        <br /><br />
+          <p className="mt-2 text-3xl font-bold text-purple-600">
+            Q{' '}
+            {productos
+              .reduce(
+                (total, p) =>
+                  total +
+                  Number(p.precio || 0) *
+                    Number(p.stock || 0),
+                0
+              )
+              .toLocaleString()}
+          </p>
+        </div>
 
-        <button type="submit">
-          Guardar producto
-        </button>
-      </form>
+      </div>
 
-      <hr />
-      <br />
+      <div className="mb-8 rounded-xl bg-white p-6 shadow">
+        <h2 className="mb-4 text-xl font-semibold">
+          Nuevo Producto
+        </h2>
 
-      <table border="1" cellPadding="10">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Precio</th>
-            <th>Stock</th>
-          </tr>
-        </thead>
+        <form
+          onSubmit={crearProducto}
+          className="grid gap-4 md:grid-cols-2"
+        >
+          <input
+            type="text"
+            placeholder="Nombre"
+            value={nombre}
+            onChange={(e) => setNombre(e.target.value)}
+            className="rounded-lg border p-3"
+          />
 
-        <tbody>
-          {productos.map((producto) => (
-            <tr key={producto.id}>
-              <td>{producto.id}</td>
-              <td>{producto.nombre}</td>
-              <td>Q {producto.precio}</td>
-              <td>{producto.stock}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+          <input
+            type="text"
+            placeholder="Descripción"
+            value={descripcion}
+            onChange={(e) => setDescripcion(e.target.value)}
+            className="rounded-lg border p-3"
+          />
+
+          <input
+            type="number"
+            placeholder="Precio"
+            value={precio}
+            onChange={(e) => setPrecio(e.target.value)}
+            className="rounded-lg border p-3"
+          />
+
+          <input
+            type="number"
+            placeholder="Stock"
+            value={stock}
+            onChange={(e) => setStock(e.target.value)}
+            className="rounded-lg border p-3"
+          />
+
+          <button
+            type="submit"
+            className="rounded-lg bg-blue-600 p-3 font-semibold text-white hover:bg-blue-700"
+          >
+            Guardar Producto
+          </button>
+        </form>
+      </div>
+
+      <div className="rounded-xl bg-white p-6 shadow">
+        <h2 className="mb-4 text-xl font-semibold">
+          Productos Registrados
+        </h2>
+
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b">
+                <th className="p-3 text-left">ID</th>
+                <th className="p-3 text-left">Nombre</th>
+                <th className="p-3 text-left">Precio</th>
+                <th className="p-3 text-left">Stock</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {productos.map((producto) => (
+                <tr
+                  key={producto.id}
+                  className="border-b hover:bg-slate-50"
+                >
+                  <td className="p-3">
+                    {producto.id}
+                  </td>
+
+                  <td className="p-3">
+                    {producto.nombre}
+                  </td>
+
+                  <td className="p-3">
+                    Q {producto.precio}
+                  </td>
+
+                  <td className="p-3">
+                    {producto.stock}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+
+          </table>
+        </div>
+      </div>
+
     </div>
-  )
+  </div>
+)
 }
 
 export default App

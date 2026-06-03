@@ -7,6 +7,8 @@ function App() {
   const [precio, setPrecio] = useState('')
   const [stock, setStock] = useState('')
   const [editandoId, setEditandoId] = useState(null)
+  const [busqueda, setBusqueda] = useState('')
+  const [mensaje, setMensaje] = useState('')
 
   useEffect(() => {
     fetch('http://localhost:8000/api/productos')
@@ -41,6 +43,11 @@ function App() {
     setDescripcion('')
     setPrecio('')
     setStock('')
+    setMensaje('Producto creado correctamente')
+
+    setTimeout(() => {
+      setMensaje('')
+    }, 3000)
   }
 
   const eliminarProducto = async (id) => {
@@ -57,6 +64,10 @@ function App() {
         (producto) => producto.id !== id
       )
     )
+    setMensaje('Producto eliminado correctamente')
+    setTimeout(() => {
+      setMensaje('')
+    }, 3000)
   }
 
   const editarProducto = (producto) => {
@@ -105,6 +116,11 @@ function App() {
     setDescripcion('')
     setPrecio('')
     setStock('')
+    setMensaje('Producto actualizado correctamente')
+
+    setTimeout(() => {
+      setMensaje('')
+    }, 3000)
   }
 
   return (
@@ -171,6 +187,14 @@ function App() {
         <h2 className="mb-4 text-xl font-semibold">
           Nuevo Producto
         </h2>
+
+        {
+          mensaje && (
+            <div className="mb-4 rounded-lg bg-green-100 p-4 text-green-800">
+              {mensaje}
+            </div>
+          )
+        }
 
         <form
           className="grid gap-4 md:grid-cols-2"
@@ -246,6 +270,13 @@ function App() {
         </h2>
 
         <div className="overflow-x-auto">
+          <input
+            type="text"
+            placeholder="Buscar producto..."
+            value={busqueda}
+            onChange={(e) => setBusqueda(e.target.value)}
+            className="mb-4 w-full rounded-lg border p-3"
+          />
           <table className="w-full">
             <thead>
               <tr className="border-b">
@@ -259,7 +290,13 @@ function App() {
             </thead>
 
             <tbody>
-              {productos.map((producto) => (
+              {productos
+                .filter((producto) =>
+                  producto.nombre
+                    .toLowerCase()
+                    .includes(busqueda.toLowerCase())
+                )
+                .map((producto) => (
                 <tr
                   key={producto.id}
                   className="border-b hover:bg-slate-50">
@@ -279,11 +316,30 @@ function App() {
                   </td>
 
                   <td className="p-3">
-                    {producto.stock}
+                    <span
+                      className={`rounded-full px-3 py-1 text-white ${
+                        producto.stock <= 5
+                          ? 'bg-red-500'
+                          : producto.stock <= 15
+                          ? 'bg-yellow-500'
+                          : 'bg-green-500'
+                      }`}
+                    >
+                      {producto.stock}
+                    </span>
                   </td>
                   <td className="p-3 flex gap-2">
                     <button
-                      onClick={() => eliminarProducto(producto.id)}
+                      onClick={() => {
+
+                        const confirmar = window.confirm(
+                          `¿Desea eliminar el producto "${producto.nombre}"?`
+                        )
+
+                        if (confirmar) {
+                          eliminarProducto(producto.id)
+                        }
+                      }}
                       className="rounded-lg bg-red-600 px-3 py-2 text-white hover:bg-red-700">Eliminar</button>
                       <button
                       onClick={() => editarProducto(producto)}

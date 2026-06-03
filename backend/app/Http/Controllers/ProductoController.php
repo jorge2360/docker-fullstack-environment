@@ -38,4 +38,14 @@ class ProductoController extends Controller
 
         return response()->json($producto);
     }
+    public function destroy(int $id)
+    {
+        $producto = Producto::findOrFail($id);
+
+        $producto->delete();
+
+        return response()->json([
+            'message' => 'Producto eliminado correctamente'
+        ]);
+    }
 }

@@ -6,6 +6,7 @@ function App() {
   const [descripcion, setDescripcion] = useState('')
   const [precio, setPrecio] = useState('')
   const [stock, setStock] = useState('')
+  const [editandoId, setEditandoId] = useState(null)
 
   useEffect(() => {
     fetch('http://localhost:8000/api/productos')
@@ -35,6 +36,70 @@ function App() {
     const nuevoProducto = await response.json()
 
     setProductos([...productos, nuevoProducto])
+
+    setNombre('')
+    setDescripcion('')
+    setPrecio('')
+    setStock('')
+  }
+
+  const eliminarProducto = async (id) => {
+
+    await fetch(
+      `http://localhost:8000/api/productos/${id}`,
+      {
+        method: 'DELETE',
+      }
+    )
+
+    setProductos(
+      productos.filter(
+        (producto) => producto.id !== id
+      )
+    )
+  }
+
+  const editarProducto = (producto) => {
+
+    setEditandoId(producto.id)
+
+    setNombre(producto.nombre)
+    setDescripcion(producto.descripcion)
+    setPrecio(producto.precio)
+    setStock(producto.stock)
+  }
+
+  const actualizarProducto = async (e) => {
+
+    e.preventDefault()
+
+    const response = await fetch(
+      `http://localhost:8000/api/productos/${editandoId}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          nombre,
+          descripcion,
+          precio,
+          stock,
+        }),
+      }
+    )
+
+    const productoActualizado = await response.json()
+
+    setProductos(
+      productos.map((producto) =>
+        producto.id === editandoId
+          ? productoActualizado
+          : producto
+      )
+    )
+
+    setEditandoId(null)
 
     setNombre('')
     setDescripcion('')
@@ -108,8 +173,12 @@ function App() {
         </h2>
 
         <form
-          onSubmit={crearProducto}
           className="grid gap-4 md:grid-cols-2"
+          onSubmit={
+            editandoId
+              ? actualizarProducto
+              : crearProducto
+          }
         >
           <input
             type="text"
@@ -145,10 +214,29 @@ function App() {
 
           <button
             type="submit"
-            className="rounded-lg bg-blue-600 p-3 font-semibold text-white hover:bg-blue-700"
+            className="rounded-lg bg-blue-600 px-4 py-3 text-white font-medium hover:bg-blue-700 transition"
           >
-            Guardar Producto
+            {editandoId
+              ? 'Actualizar producto'
+              : 'Guardar producto'}
           </button>
+          {
+            editandoId && (
+              <button
+                type="button"
+                onClick={() => {
+                  setEditandoId(null)
+                  setNombre('')
+                  setDescripcion('')
+                  setPrecio('')
+                  setStock('')
+                }}
+                className="rounded-lg bg-slate-500 px-4 py-3 text-white hover:bg-slate-600 md:col-span-2"
+              >
+                Cancelar edición
+              </button>
+            )
+          }
         </form>
       </div>
 
@@ -163,8 +251,10 @@ function App() {
               <tr className="border-b">
                 <th className="p-3 text-left">ID</th>
                 <th className="p-3 text-left">Nombre</th>
+                <th className="p-3 text-left">Descripción</th>
                 <th className="p-3 text-left">Precio</th>
                 <th className="p-3 text-left">Stock</th>
+                <th className="p-3 text-left">Acciones</th>
               </tr>
             </thead>
 
@@ -172,8 +262,7 @@ function App() {
               {productos.map((producto) => (
                 <tr
                   key={producto.id}
-                  className="border-b hover:bg-slate-50"
-                >
+                  className="border-b hover:bg-slate-50">
                   <td className="p-3">
                     {producto.id}
                   </td>
@@ -183,11 +272,25 @@ function App() {
                   </td>
 
                   <td className="p-3">
+                    {producto.descripcion}</td>
+
+                  <td className="p-3">
                     Q {producto.precio}
                   </td>
 
                   <td className="p-3">
                     {producto.stock}
+                  </td>
+                  <td className="p-3 flex gap-2">
+                    <button
+                      onClick={() => eliminarProducto(producto.id)}
+                      className="rounded-lg bg-red-600 px-3 py-2 text-white hover:bg-red-700">Eliminar</button>
+                      <button
+                      onClick={() => editarProducto(producto)}
+                      className="rounded-lg bg-yellow-500 px-3 py-2 text-white hover:bg-yellow-600"
+                    >
+                      Editar
+                    </button>
                   </td>
                 </tr>
               ))}

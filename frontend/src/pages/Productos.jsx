@@ -8,6 +8,7 @@ import SearchBar from '../components/SearchBar'
 
 import {
   obtenerProductos,
+  obtenerCategorias,
   crearProductoAPI,
   actualizarProductoAPI,
   eliminarProductoAPI
@@ -23,6 +24,8 @@ function Productos() {
   const [editandoId, setEditandoId] = useState(null)
   const [busqueda, setBusqueda] = useState('')
   const [mensaje, setMensaje] = useState('')
+  const [categoriaId, setCategoriaId] = useState('')
+  const [categorias, setCategorias] = useState([])
 
   const productosFiltrados = productos.filter(
     (producto) =>
@@ -33,7 +36,17 @@ function Productos() {
 
   useEffect(() => {
     cargarProductos()
+    cargarCategorias()
   }, [])
+
+  const cargarCategorias = async () => {
+    try {
+      const data = await obtenerCategorias()
+      setCategorias(data)
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   const cargarProductos = async () => {
     try {
@@ -162,6 +175,11 @@ function Productos() {
         setPrecio={setPrecio}
         stock={stock}
         setStock={setStock}
+
+        categoriaId={categoriaId}
+        setCategoriaId={setCategoriaId}
+        categorias={categorias}
+
         editandoId={editandoId}
         setEditandoId={setEditandoId}
         crearProducto={crearProducto}

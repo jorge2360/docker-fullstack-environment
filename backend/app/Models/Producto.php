@@ -12,4 +12,8 @@ class Producto extends Model
         'precio',
         'stock',
     ];
+    public function categoria()
+    {
+        return $this->belongsTo(Categoria::class);
+    }
 }

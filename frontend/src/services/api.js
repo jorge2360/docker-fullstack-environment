@@ -34,3 +34,11 @@ export const eliminarProductoAPI = async (id) => {
     method: 'DELETE',
   })
 }
+
+export const obtenerCategorias = async () => {
+  const response = await fetch(
+    'http://localhost:8000/api/categorias'
+  )
+
+  return response.json()
+}

@@ -42,3 +42,46 @@ export const obtenerCategorias = async () => {
 
   return response.json()
 }
+
+export const crearCategoriaAPI = async (
+  categoria
+) => {
+  const response = await fetch(
+    'http://localhost:8000/api/categorias',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(categoria),
+    }
+  )
+
+  return response.json()
+}
+
+export const actualizarCategoriaAPI =
+  async (id, categoria) => {
+    const response = await fetch(
+      `http://localhost:8000/api/categorias/${id}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(categoria),
+      }
+    )
+
+    return response.json()
+}
+
+export const eliminarCategoriaAPI =
+  async (id) => {
+    await fetch(
+      `http://localhost:8000/api/categorias/${id}`,
+      {
+        method: 'DELETE',
+      }
+    )
+  }

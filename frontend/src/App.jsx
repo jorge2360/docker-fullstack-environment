@@ -6,6 +6,7 @@ import {
 
 import Dashboard from './pages/Dashboard'
 import Productos from './pages/Productos'
+import Categorias from './pages/Categorias'
 
 function App() {
   return (
@@ -21,6 +22,11 @@ function App() {
         <Route
           path="/productos"
           element={<Productos />}
+        />
+
+        <Route
+          path="/categorias"
+          element={<Categorias />}
         />
 
       </Routes>

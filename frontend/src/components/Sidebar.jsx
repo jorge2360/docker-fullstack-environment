@@ -12,18 +12,18 @@ function Sidebar() {
 
         <Link
           to="/"
-          className="rounded-lg px-4 py-3 hover:bg-slate-700"
-        >
-          Dashboard
+          className="rounded-lg px-4 py-3 hover:bg-slate-700">Dashboard
         </Link>
 
         <Link
           to="/productos"
-          className="rounded-lg px-4 py-3 hover:bg-slate-700"
-        >
-          Productos
+          className="rounded-lg px-4 py-3 hover:bg-slate-700">Productos
         </Link>
 
+        <Link
+          to="/categorias"
+          className="rounded-lg px-4 py-3 hover:bg-slate-700">Categorías
+        </Link>
       </nav>
 
     </aside>

@@ -21,7 +21,9 @@ class CategoriaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return Categoria::create([
+            'nombre' => $request->nombre
+        ]);
     }
 
     /**
@@ -35,16 +37,24 @@ class CategoriaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Categoria $categoria)
     {
-        //
+        $categoria->update([
+        'nombre' => $request->nombre
+    ]);
+
+    return $categoria;
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Categoria $categoria)
     {
-        //
+        $categoria->delete();
+
+        return response()->json([
+            'message' => 'Eliminada'
+        ]);
     }
 }
